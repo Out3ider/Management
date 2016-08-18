@@ -1,0 +1,41 @@
+﻿@using System.Web.Optimization
+@using Demo.Web.Apis
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>仟迅科技——益销售</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    @Styles.Render("~/Content/css/css")
+    <script src="~/Scripts/datepicker/WdatePicker.js"></script>
+    @Scripts.Render("~/bundles/jplugin")
+    @RenderSection("head", false)
+</head>
+<body class="flexbox">
+    @Helper.RenderHead("user", "/login", "系统用户")
+    <div class="flexbox-body">
+        <div class="flexbox-nav">
+            @Helper.RenderMainMenu(UserController.LoadMenu(), "/index")
+        </div>
+        <main class="flexbox-content">
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        @PageData[PageHelper.PageTitle]
+                        <small>
+                            @PageData[PageHelper.PageTips]
+                        </small>
+                    </h1>
+                </div>
+            </div>
+            @RenderBody()
+        </main>
+    </div>
+    <footer>
+        @RenderPage("~/layouts/footer.cshtml")
+    </footer>
+</body>
+</html>

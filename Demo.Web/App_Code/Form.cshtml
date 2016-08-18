@@ -1,0 +1,397 @@
+﻿@using Sail.Common
+@using Demo.Web.Models
+@using Demo.Web.Apis
+
+ 
+
+@helper VisitInfo(string label, Func<object, HelperResult> act = null)
+{
+    <div class="form-float" style="padding: 0" id="toolBar">
+
+        <div class="form-group">
+            <div class="form-element-control">
+                <input type="text" class="form-control" id="key" placeholder="@label">
+                @if (act != null)
+                {
+                    @act.Invoke(null)
+                }
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <button id="btnQuery" class="btn btn-primary">过滤</button>
+            <button id="btnReset" class="btn btn-secondary">清除条件</button>
+            <button id="btnExport" class="btn btn-secondary">导出</button>
+
+        </div>
+    </div>
+}
+   
+
+
+ 
+
+
+@helper RenderGroup(Element element, Func<object, HelperResult> act, bool isMulti = false)
+{
+    <div class='form-group '>
+        <label class='control-label'>
+            @if (element.IsRequired)
+            {
+                <abbr class='form-required' title='必填'>*</abbr>
+            }
+            @element.Label :
+        </label>
+        <div class="@(isMulti?"form-element-control-flex":"form-element-control")">
+            @act.Invoke(null)
+            <span class="help-block">@element.Tips</span>
+        </div>
+    </div>
+}
+
+@helper Renderformtext(Element element, Func<object, HelperResult> act)
+{
+    <div class='form-group form-text'>
+        <label class='control-label'>
+            @element.Label：
+        </label>
+        <div class="form-element-control">
+            @act.Invoke(null)
+        </div>
+    </div>
+}
+
+
+@* 输出文本框 *@
+@helper Input(Element element)
+{
+    @RenderGroup(element, @<text>
+        <input type="text" @element.Attr() />
+    </text>)
+}
+
+@helper  TextArea(Element element)
+{
+    @RenderGroup(element, @<text>
+        <textarea rows="5" @element.Attr()></textarea>
+    </text>)
+}
+
+@helper ViewTmpl(Element element)
+{
+    @Renderformtext(element, @<text>
+        @if (element?.Class?.IndexOf("date") == 0)
+        {
+            @:{{ToDate:@element.Id}}
+
+        }
+        else
+        {
+            @:{{:@element.Id}}
+        }
+    </text>)
+}
+
+
+@helper HouseType(Element element)
+{
+    @RenderGroup(element, @<text>
+        <input type="text" data-target="@element.Id" maxlength="2" name="Room" class="form-control HouseType validate[custom[pdecimal]]" placeholder="室">
+        <input type="text" data-target="@element.Id" maxlength="2" name="Parlour" class="form-control HouseType validate[custom[pdecimal]]" placeholder="厅">
+        <input type="text" data-target="@element.Id" maxlength="2" name="Balcony" class="form-control HouseType validate[custom[pdecimal]]" placeholder="阳台">
+        <input type="text" data-target="@element.Id" maxlength="2" name="Kitchen" class="form-control HouseType validate[custom[pdecimal]]" placeholder="厨">
+        <input type="text" data-target="@element.Id" maxlength="2" name="Bathroom" class="form-control HouseType validate[custom[pdecimal]]" placeholder="卫">
+        <p class="help-block">
+            <span>室</span><span>厅</span><span>阳台</span><span>厨</span><span>卫</span>
+        </p>
+    </text>, true)
+
+}
+
+
+
+@helper InputBtn(Element element, bool isNotRelation = false, string icon = "fa-search")
+{
+    @RenderGroup(element, @<text>
+        <div class="input-group selectModal" @element.RenderData() data-target="@element.Id">
+
+
+            <input type="text" readonly="readonly" id="@(element.Id)Name" @element.RenderClass() />
+            @if (isNotRelation)
+            {
+                <input type="hidden" id="@(element.Id)Id" />
+            }
+            else
+            {
+                <input type="hidden" id="@(element.Id)" data-prop="Id" />
+            }
+
+            <a class="clear-input " style="display: none">
+                <i class="fa fa-close text-primary "></i>
+            </a>
+            <span class="input-group-btn">
+                <button class="btn btn-secondary">
+                    <i class="fa @icon"></i>
+                </button>
+            </span>
+        </div>
+    </text>)
+
+    <div class="select-result" data-target="@element.Id-result"></div>
+}
+
+
+
+@* 输出密码 *@
+@helper Password(Element element)
+{
+    @RenderGroup(element, @<text>
+        <input type="password" @element.Attr() />
+    </text>)
+}
+
+
+@* 输出复选框 *@
+@helper CheckBox(Element element)
+{
+element.Data["valuetype"] = "bool";
+    @RenderGroup(element, @<text>
+
+        <div class="checkbox-inline">
+            <div class="checkbox">
+                <input type="checkbox" @element.Attr(false) />
+                <label for="@element.Id">
+                    <span class="inc"></span>
+                    <span class="check"></span>
+                    <span class="box"></span>@element.Label
+                </label>
+            </div>
+        </div>
+    </text>)
+}
+
+
+
+@* 输出复选框集合 *@
+@helper CheckList(Element element, IList<KeyValuePair<string, string>> items)
+{
+    @RenderGroup(element, @<text>
+        <div class="checkbox-inline">
+            @foreach (var eitem in items)
+            {
+                <div class="checkbox">
+                    <input type="checkbox" id="@element.Id@eitem.Key" data-value="@eitem.Key"
+                           name="@element.Id" class="@element.Class" data-name="@eitem.Value">
+                    <label for="@element.Id@eitem.Key">
+                        <span class="inc"></span>
+                        <span class="check"></span>
+                        <span class="box"></span>@eitem.Value
+                    </label>
+                </div>
+            }
+        </div>
+    </text>)
+}
+
+@helper VisitTimes(IList<KeyValuePair<string, string>> items, string key, string memo, string visitText, string visitType, string className, bool IsShow = false)
+{
+    <div class="form-group">
+        <div class="input-group @className selectMode">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default
+                     dropdown-toggle" data-toggle="dropdown">
+                    <span id="@visitText" class="displayName">@items[0].Value</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    @foreach (var item in items)
+                    {
+                        <li data-value=@item.Key data-text="@item.Value"><a>@item.Value</a></li>
+                    }
+
+                </ul>
+            </div>
+
+            <input type="hidden" class="form-control" value="@items[0].Key" name="@visitType" data-defaultvalue="@items[0].Key">
+            <input type="text" class="form-control validate[custom[pinteger]]" name="@key" placeholder="@memo">
+            @if (IsShow)
+            {
+                <div class="input-group-btn  ">
+                    <button type="button" class="btn btn-default">
+                        <span>%</span>
+                    </button>
+
+                </div>
+            }
+
+        </div>
+    </div>
+}
+
+
+@helper baseTimer(string timeType, string timeText, string className, Dictionary<string, string> values)
+{
+    <div class="form-group">
+        <div class="input-group dateSwitch" data-init="false">
+            <div class="input-group-btn  @className">
+                <button type="button" class="btn btn-default dropdown-toggle " data-toggle="dropdown" aria-expanded="false">
+                    <span id="@timeText">@(values.First().Value)</span> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    @foreach (var v in values)
+                    {
+                        <li data-value="@v.Key" data-text="@v.Value"><a>@v.Value</a></li>
+                    }
+                    @*<li data-value="LastVisitTime" data-text="回访时间"><a>回访时间</a></li>
+
+                        <li data-value="CreateTime" data-text="创建时间"><a>创建时间</a></li>*@
+                </ul>
+                <input type="hidden" id="@timeType" value="@(values.First().Key)" data-defaultvalue="@(values.First().Key)" />
+            </div>
+            <input type="text" class="date form-control" placeholder="开始日期" readonly="" name="dayStart">
+            <span class="input-group-addon">至</span>
+            <input type="text" class="date form-control" placeholder="结束日期" readonly="" name="dayEnd">
+            @TimeSet()
+
+        </div>
+    </div>
+}
+
+@helper TimesSelect(string timeType, string timeText, string className)
+{
+    @baseTimer(timeType, timeText, className, new Dictionary<string, string> { ["LastVisitTime"] = "回访时间", ["CreateTime"] = "创建时间" })
+}
+
+
+@helper LastTimesSelect(string timeType, string timeText, string className)
+{
+    @baseTimer(timeType, timeText, className, new Dictionary<string, string> { ["LastTestTime"] = "最后试压时间", ["LastVisitTime"] = "最后回访时间", ["LastCheckTime"] = "最后审核时间" })
+
+}
+
+
+@helper TestTimesSelect(string timeType, string timeText, string className)
+{
+
+    @baseTimer(timeType, timeText, className, new Dictionary<string, string> { ["TestDate"] = "试压时间", ["CreateTime"] = "创建时间" })
+
+}
+
+@helper ConditionQuery()
+{
+    <div class="form-group">
+        <div class="form-element-control testkey">
+            <input type="text" class="form-control" id="Iro" placeholder="经销商名称/电话">
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="form-element-control testkey">
+            <input type="text" class="form-control" id="Dec" placeholder="家装公司名称">
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="form-element-control testkey">
+            <input type="text" class="form-control" id="Pm" placeholder="项目经理姓名/电话">
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="form-element-control testkey">
+            <input type="text" class="form-control" id="Des" placeholder="设计师姓名/电话">
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="form-element-control testkey">
+            <input type="text" class="form-control" id="Plum" placeholder="水工姓名/电话/水工工号">
+        </div>
+
+    </div>
+}
+
+
+@helper startEndTime(string textStart = "开始日期", string textEnd = "结束日期")
+{
+    <div class="form-group">
+        <div class="input-group dateSwitch" data-init="true">
+            <input type="text" name="dayStart" class="date form-control" placeholder="@textStart">
+            <span class="input-group-addon">至</span>
+            <input type="text" name="dayEnd" class="date form-control" placeholder="@textEnd">
+            @TimeSet()
+        </div>
+    </div>
+}
+
+@helper TimeSet()
+{<div class="input-group-btn  ">
+        <button type="button" class="btn btn-default dropdown-toggle " data-toggle="dropdown" aria-expanded="false">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu " role="menu">
+            <li><a class="today">今日</a></li>
+            <li><a class="thisWeek">本周</a></li>
+            <li><a class="thisMonth">本月</a></li>
+            <li class="divider"></li>
+            <li><a class="preDay">上一天</a></li>
+            <li><a class="nextDay">下一天</a></li>
+            <li class="divider"></li>
+            <li><a class="preWeek">上一周</a></li>
+            <li><a class="nextWeek">下一周</a></li>
+            <li class="divider"></li>
+            <li><a class="preMonth">上一月</a></li>
+            <li><a class="nextMonth">下一月</a></li>
+        </ul>
+    </div>
+
+}
+
+
+@* 输出选择器 *@
+@helper Select(Element element, IList<KeyValuePair<string, string>> items, string defaultText = "", string defaultValue = "", string prop = "")
+        {
+
+element.Data["text"] = "Value";
+element.Data["value"] = "Key";
+if (!string.IsNullOrEmpty(prop)) { element.Data["prop"] = prop; }
+if (!string.IsNullOrEmpty(defaultValue)) { element.Data["defaultvalue"] = defaultValue; }
+if (!string.IsNullOrEmpty(defaultText)) { element.Data["defaulttext"] = defaultText; }
+    @RenderGroup(element, @<text>
+            <select @element.Attr()>
+
+                @items.RenderOptions(defaultText, defaultValue)
+            </select>
+    </text>)
+}
+ 
+
+@*输出查看字段*@
+@helper ViewTag(Element element, string formClass = "")
+{
+    <div class='form-group form-text @formClass'>
+        <label class='control-label'>
+            @element.Label ：
+        </label>
+        <div class="form-element-control">
+            <span name="@element.Id" class="prop @element.Class" @element.RenderData()></span>
+            @*&nbsp;*@
+            @*@if (!string.IsNullOrEmpty(element.Tips))
+                {     <span class="help-block">@element.Tips</span>}*@
+        </div>
+    </div>
+}
+
+
+ 
+
+@helper BtnView()
+{
+    <a class="pull-right btnToView" title="查看" data-toggle="tooltip"><i class="fa fa-lg fa-eye"></i></a>
+}
+
+@helper BtnEdit()
+{
+    <a class="pull-right btnToEdit" title="编辑" data-toggle="tooltip"><i class="fa fa-lg fa-edit"></i></a>
+}
