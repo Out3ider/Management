@@ -13,16 +13,16 @@
         <div class="page-header-inner">
             <div class="page-logo">
                 <a>
-                    <img src="~/Content/images/q.png" alt="logo" class="logo-default" />
+                    <img src="~/Content/images/2fdda3cc7cd98d10c7d48b48233fb80e7bec9043.jpg" alt="logo" class="logo-default" />
                 </a>
             </div>
             @if (companyName.IsNotNull())
             {
-            <div class="page-actions">
-                <div class="top-tags">
-                    <i class="fa fa-building"></i>&nbsp;&nbsp;&nbsp;<span>@companyName</span>
+                <div class="page-actions">
+                    <div class="top-tags">
+                        <i class="fa fa-building"></i>&nbsp;&nbsp;&nbsp;<span>@companyName</span>
+                    </div>
                 </div>
-            </div>
             }
             <div class="page-top">
 
@@ -116,9 +116,9 @@
             @{
                 foreach (var item in enumType.EnumList())
                 {
-            <li class="nav-item">
-                <a data-type="@item.Key" data-text="@item.Value" class="nav-link">@item.Value</a>
-            </li>
+                    <li class="nav-item">
+                        <a data-type="@item.Key" data-text="@item.Value" class="nav-link">@item.Value</a>
+                    </li>
                 }
             }
         </ul>
@@ -208,11 +208,11 @@ foreach (var item in items)
                 <div class="actions">
                     @if (isHasAdd)
                     {
-                    <div class="btn-group pull-right">
-                        <button class="btn   btn-primary" id="btnAdd">
-                            新增<i class="fa fa-lg fa-plus"></i>
-                        </button>
-                    </div>
+                        <div class="btn-group pull-right">
+                            <button class="btn   btn-primary" id="btnAdd">
+                                新增<i class="fa fa-lg fa-plus"></i>
+                            </button>
+                        </div>
                     }
                 </div>
             </div>
@@ -220,7 +220,7 @@ foreach (var item in items)
                 <div class="table-toolbar" id="toolbar">
                     @if (toolbar != null)
                     {
-                    @toolbar.Invoke(null)
+                        @toolbar.Invoke(null)
                     }
                 </div>
                 <div class="table-scrollable">
@@ -266,9 +266,9 @@ foreach (var item in items)
                             </li>
                             @if (tabs != null)
                             {
-                            <li class="nav-item">
-                                <a class="nav-link" data-target="pointlog">@tabs.Invoke(null)</a>
-                            </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-target="pointlog">@tabs.Invoke(null)</a>
+                                </li>
                             }
                         </ul>
 
@@ -296,7 +296,7 @@ foreach (var item in items)
                             <div class="tab-pane otherInfo" id="pointlog">
                                 @if (PointLogShow != null)
                                 {
-                                @PointLogShow.Invoke(null)
+                                    @PointLogShow.Invoke(null)
                                 }
                             </div>
                         </div>
@@ -304,23 +304,29 @@ foreach (var item in items)
                 </div>
                 @if (expand != null)
                 {
-                <div class="col-sm-4 expandForm">
-                    @expand.Invoke(null)
-                </div>
+                    <div class="col-sm-4 expandForm">
+                        @expand.Invoke(null)
+                    </div>
                 }
 
 
             </div>
             @if (result != null)
             {
-            @result.Invoke(null)
+                @result.Invoke(null)
             }
         </div>
     </div>
 }
 
-
-
-
-
- 
+@helper RenderEnum(IEnumerable<KeyValuePair<int, string>> list, string defaultValue = "", string defaultText = "")
+{
+if (defaultText.IsNotNull())
+{
+        <option value="@defaultValue">@defaultText</option>
+}
+foreach (var obj in list)
+{
+        <option value="@obj.Key">@obj.Value</option>
+}
+}

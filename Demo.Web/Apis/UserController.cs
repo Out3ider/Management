@@ -18,7 +18,7 @@ namespace Demo.Web.Apis
             // var user = WebHelper.CheckUser<User>();
             var menutext = FileHelper.ReadTextFile("~/config/menu.json".FullFileName());
             var list = menutext.JsonToObj<List<HMenuItem>>().ToList();
-            HMenuItem.Filter(list, "", null);
+            //HMenuItem.Filter(list, "", null);
             return list;
         }
     }

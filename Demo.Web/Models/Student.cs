@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Web;
@@ -16,7 +17,7 @@ namespace Demo.Web.Models
         大三,
         大四,
     }
-
+    
     /// <summary>
     /// 性别
     /// </summary>
@@ -51,13 +52,16 @@ namespace Demo.Web.Models
         /// </summary>
         [HColumn]
         public Grade Grade { set; get; }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public string GradeStr => Grade.ToString();
         /// <summary>
         /// 性别
         /// </summary>
         [HColumn]
         public Gender Gender { set; get; }
-
+        public string GenderStr => Gender.ToString();
         /// <summary>
         /// 年龄
         /// </summary>

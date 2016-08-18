@@ -2,11 +2,12 @@
 @using Demo.Web.Apis
 
 
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>仟迅科技——益销售</title>
+    <title>学生信息管理系统</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     @Styles.Render("~/Content/css/css")
@@ -18,7 +19,7 @@
     @Helper.RenderHead("user", "/login", "系统用户")
     <div class="flexbox-body">
         <div class="flexbox-nav">
-            @Helper.RenderMainMenu(UserController.LoadMenu(), "/index")
+            @Helper.RenderMainMenu(UserController.LoadMenu(), "/Pages/index")
         </div>
         <main class="flexbox-content">
             <div class="page-head">
