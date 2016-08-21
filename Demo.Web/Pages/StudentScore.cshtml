@@ -1,3 +1,136 @@
-﻿@{
+﻿@using Demo.Web.Apis
+@using Sail.Common
+@{
     var user = this.SetPage("5AD5231B-E2CC-48B4-9A87-C9B1801C453A", "学生成绩", "各科成绩");
 }
+@section head{
+    <script id="listTmpl" type="text/x-jsrender">
+        <tr>
+            <td>
+                <a class="btnView">
+                    {{>Student.Number}}
+                </a>
+            </td>
+            <td>{{>Student.Name}}</td>
+            <td>
+                {{>Course.Name}}
+            </td>
+            <td>{{>Score}}</td>
+            <td>
+                <a class="text-primary m_r_10 btnEdit" title="修改" data-toggle="tooltip"><i class="fa fa-edit fa-lg"></i></a>
+                <a class="text-danger btnRemove" title="删除" data-toggle="tooltip"><i class="fa fa-lg  fa-trash"></i></a>
+            </td>
+        </tr>
+
+    </script>
+    <script id="modalTmpl" type="text/x-jsrender">
+
+        <div class="form-group ">
+            <label class="col-md-2 control-label">
+                学生学号：<span>*</span>
+            </label>
+            <div class="col-md-10">
+                <select class="form-control validate[required] " id="Student" data-prop="StudentId">
+                    @Helper.RendeIModel(StudentController.GetAll(),"","请选择学生");
+                        
+                </select>
+                @*<input type="text" class="form-control validate[required,custom[pdecimal]]" id="Student" data-prop="StudentId" placeholder="请输入学生学号" />*@
+            </div>
+        </div>
+        @*<div class="form-group ">
+                <label class="col-md-2 control-label">
+                    学生姓名：<span>*</span>
+                </label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control validate[required]" id="Student.Name" placeholder="请输入学生姓名" />
+                </div>
+            </div>*@
+
+        <div class="form-group ">
+            <label class="col-md-2 control-label">
+                课程名称：<span>*</span>
+            </label>
+            <div class="col-md-10">
+                <select class="form-control validate[required]" id="Course" data-prop="CourseId">
+                    
+                </select>
+                       @*<input type="text" class="form-control validate[required]" id="Course"  data-prop="CourseId"  placeholder="请输入课程名称" />*@
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="col-md-2 control-label">
+                成绩：<span>*</span>
+            </label>
+            <div class="col-md-10">
+                <input type="text" class="form-control validate[required,custom[pdecimal]]" id="Score" placeholder="请输入该科成绩" />
+            </div>
+        </div>
+
+        @*<div class="form-group ">
+                <label class="col-md-2 control-label">
+                    所属县区：
+                </label>
+                <div class="col-md-10">
+                    <select class="form-control validate[required] " id="County" data-prop="Id">
+                        @Helpers.RenderDict(CountyController.GetAll(), "", "请选择县区");
+                    </select>
+                </div>
+            </div>*@
+
+
+        @*<div class="form-group ">
+            <label class="col-md-2 control-label">
+                排序号：<span>*</span>
+            </label>
+            <div class="col-md-10">
+                <input type="text" data-defaultvalue="0" class="form-control validate[required,custom[pdecimal]]" id="OrderByNo" placeholder="请输入排序号" />
+                <span class="help-block text-warning">社区按照排序号由小到大排列</span>
+            </div>*@
+
+    </script>
+    <script>
+        $(function () {
+            var tool = new Sail.RazorPage("", "StudentScore", "ScoreId");
+            tool.CreatePage({
+                titles: ["学生学号", "学生姓名", "课程名称", "成绩", "操作"],
+                titleWidth: [0, 0, 0, 0, 120]
+            });
+            tool.Page.Query();
+        })
+    </script>
+}
+
+@Helper.PageList(
+
+    @<text>
+        <div class="form-float" style="padding: 0;">
+
+            <div class="form-group">
+                <div class="form-element-control">
+                    <input type="text" class="form-control" name="key" placeholder="过滤关键字" />
+                </div>
+            </div>
+            @* 添加描述 *@
+            @*<div class="form-group">
+                    <div class="form-element-control">
+                        <input type="text" class="form-control" name="describe" placeholder="过滤社区描述" />
+                    </div>
+                </div>*@
+            @*<div class="form-group">
+                    <div class="form-element-control">
+                        <select class="form-control" name="county">
+                            @CountyController.GetAllKv().RenderOptions("全部县区", "");
+                        </select>
+                    </div>
+                </div>*@
+            <div class="form-group">
+                <button class="btn btn-primary" id="btnQuery">
+                    <i class="fa fa-search"></i>
+                    查找
+                </button>
+                <button id="btnReset" class="btn btn-secondary">清除条件</button>
+            </div>
+        </div>
+    </text>)
+
+@Helper.PageDetail()

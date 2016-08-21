@@ -2,3 +2,119 @@
     var user = this.SetPage("BFD35BA2-E1C7-4271-8742-4D30F9533D3A", "课程管理", "学科信息");
 
 }
+@section head{
+    <script id="listTmpl" type="text/x-jsrender">
+        <tr>
+            <td>
+                <a class="btnView">
+                    {{>Name}}
+                </a>
+            </td>
+            <td>
+                {{>TeacherName}}
+            </td>
+            <td>{{ToDateTime:ExamDate}}</td>
+            <td>
+                <a class="text-primary m_r_10 btnEdit" title="修改" data-toggle="tooltip"><i class="fa fa-edit fa-lg"></i></a>
+                <a class="text-danger btnRemove" title="删除" data-toggle="tooltip"><i class="fa fa-lg  fa-trash"></i></a>
+            </td>
+        </tr>
+
+    </script>
+    <script id="modalTmpl" type="text/x-jsrender">
+
+        <div class="form-group ">
+            <label class="col-md-2 control-label">
+                课程名称：<span>*</span>
+            </label>
+            <div class="col-md-10">
+                <input type="text" class="form-control validate[required]" id="Name" placeholder="请输入课程名称" />
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="col-md-2 control-label">
+                教师姓名：<span>*</span>
+            </label>
+            <div class="col-md-10">
+                <input type="text" class="form-control validate[required]" id="TeacherName" placeholder="请输入教师姓名" />
+            </div>
+        </div>
+
+        <div class="form-group ">
+            <label class="col-md-2 control-label">
+                考试日期：<span>*</span>
+            </label>
+            <div class="col-md-10">
+                <input type="text" class="form-control datetime validate[required]" id="ExamDate" placeholder="请输入考试日期" />
+            </div>
+        </div>
+
+
+        @*<div class="form-group ">
+                <label class="col-md-2 control-label">
+                    所属县区：
+                </label>
+                <div class="col-md-10">
+                    <select class="form-control validate[required] " id="County" data-prop="Id">
+                        @Helpers.RenderDict(CountyController.GetAll(), "", "请选择县区");
+                    </select>
+                </div>
+            </div>*@
+
+
+        @*<div class="form-group ">
+            <label class="col-md-2 control-label">
+                排序号：<span>*</span>
+            </label>
+            <div class="col-md-10">
+                <input type="text" data-defaultvalue="0" class="form-control validate[required,custom[pdecimal]]" id="OrderByNo" placeholder="请输入排序号" />
+                <span class="help-block text-warning">社区按照排序号由小到大排列</span>
+            </div>*@
+        </div>
+    </script>
+    <script>
+        $(function () {
+            var tool = new Sail.RazorPage("", "Course", "CourseId");
+            tool.CreatePage({
+                titles: ["课程名称", "教师姓名", "考试日期","操作"],
+                titleWidth: [0, 0, 0, 120]
+            });
+            tool.Page.Query();
+        })
+    </script>
+}
+
+@Helper.PageList(
+
+    @<text>
+        <div class="form-float" style="padding: 0;">
+
+            <div class="form-group">
+                <div class="form-element-control">
+                    <input type="text" class="form-control" name="key" placeholder="按课程/教师查找" />
+                </div>
+            </div>
+            @* 添加描述 *@
+            @*<div class="form-group">
+                    <div class="form-element-control">
+                        <input type="text" class="form-control" name="describe" placeholder="过滤社区描述" />
+                    </div>
+                </div>*@
+            @*<div class="form-group">
+                    <div class="form-element-control">
+                        <select class="form-control" name="county">
+                            @CountyController.GetAllKv().RenderOptions("全部县区", "");
+                        </select>
+                    </div>
+                </div>*@
+            <div class="form-group">
+                <button class="btn btn-primary" id="btnQuery">
+                    <i class="fa fa-search"></i>
+                    查找
+                </button>
+                <button id="btnReset" class="btn btn-secondary">清除条件</button>
+            </div>
+        </div>
+    </text>)
+
+@Helper.PageDetail()

@@ -17,7 +17,7 @@
             </td>
             <td>{{>GradeStr}}</td>
             <td>{{>GenderStr}}</td>
-            <td> {{>Age}}</td> 
+            <td>{{>Age}}</td>
             <td>
                 <a class="text-primary m_r_10 btnEdit" title="修改" data-toggle="tooltip"><i class="fa fa-edit fa-lg"></i></a>
                 <a class="text-danger btnRemove" title="删除" data-toggle="tooltip"><i class="fa fa-lg  fa-trash"></i></a>
@@ -49,7 +49,7 @@
             </label>
             <div class="col-md-10">
                 <select class="form-control validate[required]" id="Grade">
-                   @Helper.RenderEnum(typeof(Demo.Web.Models.Grade).GetEnumItems(), "", "请选择年级");
+                    @Helper.RenderEnum(typeof(Demo.Web.Models.Grade).GetEnumItems(), "", "请选择年级");
                 </select>
             </div>
         </div>
@@ -59,7 +59,7 @@
             </label>
             <div class="col-md-10">
                 <select class="form-control validate[required]" id="Gender">
-                   @Helper.RenderEnum(typeof(Demo.Web.Models.Gender).GetEnumItems(), "", "请选择性别")
+                    @Helper.RenderEnum(typeof(Demo.Web.Models.Gender).GetEnumItems(), "", "请选择性别")
                 </select>
             </div>
         </div>
@@ -86,18 +86,18 @@
 
 
         @*<div class="form-group ">
-                <label class="col-md-2 control-label">
-                    排序号：<span>*</span>
-                </label>
-                <div class="col-md-10">
-                    <input type="text" data-defaultvalue="0" class="form-control validate[required,custom[pdecimal]]" id="OrderByNo" placeholder="请输入排序号" />
-                    <span class="help-block text-warning">社区按照排序号由小到大排列</span>
-                </div>*@
-            </div>
+            <label class="col-md-2 control-label">
+                排序号：<span>*</span>
+            </label>
+            <div class="col-md-10">
+                <input type="text" data-defaultvalue="0" class="form-control validate[required,custom[pdecimal]]" id="OrderByNo" placeholder="请输入排序号" />
+                <span class="help-block text-warning">社区按照排序号由小到大排列</span>
+            </div>*@
+
     </script>
     <script>
         $(function () {
-            var tool = new Sail.RazorPage("", "Student", "CourseId");
+            var tool = new Sail.RazorPage("", "Student", "StudentId");
             tool.CreatePage({
                 titles: ["姓名", "学号", "年级", "性别", "年龄", "操作"],
                 titleWidth: [0, 0, 0, 0, 0, 120]
@@ -105,7 +105,6 @@
             tool.Page.Query();
         })
     </script>
-
 }
 
 @Helper.PageList(
@@ -115,32 +114,36 @@
 
             <div class="form-group">
                 <div class="form-element-control">
-                    <input type="text" class="form-control" name="key" placeholder="过滤关键字" />
+                    <input type="text" class="form-control" name="key" placeholder="按姓名/学号过滤" />
                 </div>
             </div>
-            @* 添加描述 *@
-            @*<div class="form-group">
-                    <div class="form-element-control">
-                        <input type="text" class="form-control" name="describe" placeholder="过滤社区描述" />
-                    </div>
-                </div>*@
-            @*<div class="form-group">
-                    <div class="form-element-control">
-                        <select class="form-control" name="county">
-                            @CountyController.GetAllKv().RenderOptions("全部县区", "");
-                        </select>
-                    </div>
-                </div>*@
+            <div class="form-group">
+                <div class="form-element-control">
+                    <select class="form-control" id="grade">
+                        @*<option value="">请选择年级</option>
+                            <option value="0">大一</option>
+                            <option value="1">大二</option>
+                            <option value="2">大三</option>
+                            <option value="3">大四</option>*@
+                        @Helper.RenderEnum(typeof(Demo.Web.Models.Grade).GetEnumItems(), "", "请选择年级");
+                    </select>
+                    @*<input type="text" class="form-control" name="grade" placeholder="按年级过滤" />*@
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-element-control">
+                    <select class="form-control" id="gender">
+                        @Helper.RenderEnum(typeof(Demo.Web.Models.Gender).GetEnumItems(), "", "请选择性别");
+                    </select>
+                </div>
+            </div>
             <div class="form-group">
                 <button class="btn btn-primary" id="btnQuery">
                     <i class="fa fa-search"></i>
-                    过滤
+                    查找
                 </button>
                 <button id="btnReset" class="btn btn-secondary">清除条件</button>
             </div>
-
-
-
         </div>
     </text>)
 

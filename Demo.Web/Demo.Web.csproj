@@ -153,7 +153,7 @@
     <Content Include="Content\css\plugins.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\images\2fdda3cc7cd98d10c7d48b48233fb80e7bec9043.jpg" />
-    <Content Include="Content\images\psb %281%29.jpg" />
+    <Content Include="Content\images\psb.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\images\1.jpg" />
     <Content Include="Content\images\2.jpg" />
@@ -233,15 +233,19 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Apis\CourseController.cs" />
     <Compile Include="Apis\Element.cs" />
     <Compile Include="Apis\PageHelper.cs" />
     <Compile Include="Apis\BundleConfig.cs" />
+    <Compile Include="Apis\StudentScoreController.cs" />
     <Compile Include="Apis\StudentController.cs" />
     <Compile Include="Apis\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\DictBaseController.cs" />
+    <Compile Include="Models\IDictController.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\StudentScore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

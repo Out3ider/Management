@@ -330,3 +330,20 @@ foreach (var obj in list)
         <option value="@obj.Key">@obj.Value</option>
 }
 }
+
+ 
+
+@helper RendeIModel(IEnumerable<KeyValuePair<string,string>> list, string defaultValue = "", string defaultText = "")
+{
+if (defaultText.IsNotNull())
+{
+        <option value="@defaultValue">@defaultText</option>
+}
+if (list != null)
+{
+    foreach (var obj in list)
+    {
+            <option value="@obj.Key">@obj.Value</option>
+    }
+}
+}
