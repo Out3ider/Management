@@ -25,6 +25,26 @@ namespace Demo.Web.Apis
         //    if (key.IsNotNull()) where &= Clip.Where<>(x => x.Like(key));
         //    return where;
         //}
+        protected override Clip MakeWhere(string key)
+        {
+            Clip where = null;
+            if (key.IsNotNull()) where &= Clip.Where<StudentScore>(x => x.Student.Name.Like(key) || x.Student.Number.Like(key));
+            return where;
+        }
+
+        [HttpGet]
+        public AjaxResult GetList(int pageIndex, int pageSize, string key, string course)
+        {
+            return HandleHelper.TryAction(db =>
+            {
+                var clip = MakeWhere(key);
+               
+                //if (county.IsNotNull()) clip &= nameof(Community.County).ToField("") == county;
+               if (course.IsNotNull()) clip &= Clip.Where<StudentScore>(x => x.Course.Name.Like(course));
+                //clip &= Clip.Where<Community>(x => x.Name == county);
+                return db.GetPageList<StudentScore>(pageIndex, pageSize, clip, OrderBy);
+            });
+        }
 
     };
         

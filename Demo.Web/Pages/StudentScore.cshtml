@@ -31,8 +31,7 @@
             </label>
             <div class="col-md-10">
                 <select class="form-control validate[required] " id="Student" data-prop="StudentId">
-                    @Helper.RendeIModel(StudentController.GetAll(),"","请选择学生");
-                        
+                    @Helper.RendeIModel(StudentController.GetAll(), "", "请选择学生");
                 </select>
                 @*<input type="text" class="form-control validate[required,custom[pdecimal]]" id="Student" data-prop="StudentId" placeholder="请输入学生学号" />*@
             </div>
@@ -52,9 +51,9 @@
             </label>
             <div class="col-md-10">
                 <select class="form-control validate[required]" id="Course" data-prop="CourseId">
-                    
+                    @Helper.RendeIModel(CourseController.GetAll(), "", "请选择课程");
                 </select>
-                       @*<input type="text" class="form-control validate[required]" id="Course"  data-prop="CourseId"  placeholder="请输入课程名称" />*@
+                @*<input type="text" class="form-control validate[required]" id="Course"  data-prop="CourseId"  placeholder="请输入课程名称" />*@
             </div>
         </div>
         <div class="form-group ">
@@ -107,9 +106,14 @@
 
             <div class="form-group">
                 <div class="form-element-control">
-                    <input type="text" class="form-control" name="key" placeholder="过滤关键字" />
+                    <input type="text" class="form-control" name="key" placeholder="按姓名/学号查找"/>
                 </div>
             </div>
+            <div class="form-group">
+                <div class="form-element-control">
+                    <input type="text" class="form-control" name="course" placeholder="按课程查找"/>
+                </div>
+            </div>    
             @* 添加描述 *@
             @*<div class="form-group">
                     <div class="form-element-control">
